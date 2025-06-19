@@ -1,7 +1,18 @@
+import java.util.Properties
+import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+}
+
+
+
+// Carica la chiave da secrets.properties
+val secretsFile = rootProject.file("secrets.properties")
+val secrets = Properties()
+if (secretsFile.exists()) {
+    secrets.load(FileInputStream(secretsFile))
 }
 
 android {
@@ -15,16 +26,22 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        val openaiKey: String by project
-        buildConfigField("String", "OPENAI_API_KEY", "\"$openaiKey\"")
+        // Inserisce OPENAI_API_KEY nella BuildConfig
+        buildConfigField("String", "OPENAI_API_KEY", "\"${secrets.getProperty("openaikey")}\"")
     }
 
     buildFeatures {
         compose = true
         buildConfig = true
     }
-    composeOptions { kotlinCompilerExtensionVersion = "1.4.3" }
-    kotlinOptions { jvmTarget = "1.8" }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -47,12 +64,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.4.3")
 
-    testImplementation("junit:junit:4.13.2") // Per Unit Test standard
-    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Per Android Instrumentation Test
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1") // Per test UI
-
-
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
-
-
-
