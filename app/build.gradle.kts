@@ -7,12 +7,12 @@ plugins {
 }
 
 
-
-
 val secretsFile = rootProject.file("secrets.properties")
 val secrets = Properties()
 if (secretsFile.exists()) {
     secrets.load(FileInputStream(secretsFile))
+} else {
+    println("File secrets.properties non trovato nella root!")
 }
 
 android {
@@ -27,7 +27,7 @@ android {
         versionName = "1.0"
 
 
-        buildConfigField("String", "OPENAI_API_KEY", "\"${secrets.getProperty("openaikey")}\"")
+        buildConfigField("String", "OPENAI_API_KEY", "\"${secrets.getProperty("OPENAI_API_KEY")}\"")
     }
 
     buildFeatures {
