@@ -8,7 +8,7 @@ plugins {
 
 
 
-// Carica la chiave da secrets.properties
+
 val secretsFile = rootProject.file("secrets.properties")
 val secrets = Properties()
 if (secretsFile.exists()) {
@@ -26,7 +26,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        // Inserisce OPENAI_API_KEY nella BuildConfig
+
         buildConfigField("String", "OPENAI_API_KEY", "\"${secrets.getProperty("openaikey")}\"")
     }
 
